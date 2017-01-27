@@ -5,12 +5,10 @@ import java.util.Map;
 
 public class ChessBoard {
 	private ChessPieces[][] boardState;
-	private Map<ChessPieces, int[]> location;
 	
 	public ChessBoard(){
 		boardState = new ChessPieces[8][8];
 		resetBoard();
-		location = new HashMap<ChessPieces, int[]>();
 	}
 	
 	public ChessPieces getPiece(int x, int y){

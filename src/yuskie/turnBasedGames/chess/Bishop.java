@@ -1,5 +1,8 @@
 package yuskie.turnBasedGames.chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bishop implements ChessPieces{
 	
 	String color;
@@ -7,14 +10,29 @@ public class Bishop implements ChessPieces{
 		this.color = color;
 	}
 
-	public String[] possibleMovements(ChessBoard currentState) {
-		
+	public ArrayList<int[]> possibleMovements(ChessBoard currentState) {
+		int[] location = this.getXYLocation(currentState);
+		int pieceX = location[0];
+		int pieceY = location[1];
+		ArrayList<int[]> possibleMoves = new ArrayList<int[]>();
+		for(int i = 1; i<8; i++){
+			for(int j = 1; j<8; j++){
+				if(pieceX+i<8 && pieceY+i<8){
+					ChessPieces pieceAtLoc = currentState.getPiece(i, j);
+					if(pieceAtLoc == null){
+						possibleMoves.add(new int[]{pieceX+i,pieceY+j});
+					}else if(pieceAtLoc.getColor()!=this.getColor()){
+						possibleMoves.add(new int[]{pieceX+i,pieceY+j});
+					}
+				}
+			}
+		}
 		//Loop for diagonal movment
 			//Checks if piece exists there;
 				// if enemy, DESTROY
 				// else that's the limit;
 		
-		return null;
+		return possibleMoves;
 	}
 	
 	public String printPiece() {
