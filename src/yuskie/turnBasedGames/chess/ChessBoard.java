@@ -8,6 +8,10 @@ public class ChessBoard {
 		resetBoard();
 	}
 	
+	public ChessPieces getPiece(int x, int y){
+		return boardState[x][y];
+	}
+	
 	private void resetBoard(){
 		String color = "Black";
 		for(int i = 0;i<8;){
@@ -53,9 +57,9 @@ public class ChessBoard {
 	}
 	
 //// Test if it prints board correctly
-//	public static void main(String[] args){
-//		ChessBoard newChessGame = new ChessBoard();
-//		newChessGame.printBoard();
-//	}
+	public static void main(String[] args){
+		ChessBoard newChessGame = new ChessBoard();
+		newChessGame.printBoard();
+	}
 
 }
