@@ -1,11 +1,16 @@
 package yuskie.turnBasedGames.chess;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ChessBoard {
 	private ChessPieces[][] boardState;
+	private Map<ChessPieces, int[]> location;
 	
 	public ChessBoard(){
 		boardState = new ChessPieces[8][8];
 		resetBoard();
+		location = new HashMap<ChessPieces, int[]>();
 	}
 	
 	public ChessPieces getPiece(int x, int y){
@@ -51,15 +56,26 @@ public class ChessBoard {
 				}
 				System.out.print("|");
 			}
+			System.out.print("  " + i);
 			System.out.println();
 			System.out.println(boardEdge);
 		}
+		for(int i = 0; i<8; i++){
+			System.out.print("  " +i +"  ");
+		}
+		System.out.println();
 	}
+	
 	
 //// Test if it prints board correctly
 	public static void main(String[] args){
 		ChessBoard newChessGame = new ChessBoard();
 		newChessGame.printBoard();
+		ChessPieces piece = newChessGame.getPiece(0, 0);
+		int[] location = piece.getXYLocation(newChessGame);
+		for(int i =0 ; i<location.length;i++){
+			System.out.print(location[i]+ " ");
+		}
 	}
 
 }

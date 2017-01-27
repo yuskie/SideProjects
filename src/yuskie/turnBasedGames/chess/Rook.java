@@ -7,13 +7,11 @@ public class Rook implements ChessPieces{
 		this.color = color;
 	}
 
-	@Override
 	public String[] possibleMovements(ChessBoard currentState) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	@Override
 	public String printPiece() {
 		String colorChar ="";
 		if(color.equals("White")){
@@ -24,9 +22,21 @@ public class Rook implements ChessPieces{
 		return colorChar +"R ";
 	}
 
-	@Override
 	public String getColor() {
 		return this.color;
+	}
+
+	public int[] getXYLocation(ChessBoard currentState) {
+		int[] pieceLocation = new int[2];
+		for(int i = 0; i<8; i++){
+			for(int j = 0; j<8; j++){
+				if(this == currentState.getPiece(i,j)){
+					pieceLocation[0]=i;
+					pieceLocation[1]=j;
+				}
+			}
+		}
+		return pieceLocation;
 	}
 
 }

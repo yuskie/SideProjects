@@ -7,8 +7,8 @@ public class Bishop implements ChessPieces{
 		this.color = color;
 	}
 
-	@Override
 	public String[] possibleMovements(ChessBoard currentState) {
+		
 		//Loop for diagonal movment
 			//Checks if piece exists there;
 				// if enemy, DESTROY
@@ -17,7 +17,6 @@ public class Bishop implements ChessPieces{
 		return null;
 	}
 	
-	@Override
 	public String printPiece() {
 		String colorChar ="";
 		if(color.equals("White")){
@@ -28,7 +27,6 @@ public class Bishop implements ChessPieces{
 		return colorChar +"B ";
 	}
 
-	@Override
 	public String getColor() {
 		return color;
 	}
