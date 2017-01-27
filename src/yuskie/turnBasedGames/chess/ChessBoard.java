@@ -21,19 +21,28 @@ public class ChessBoard {
 		String color = "Black";
 		for(int i = 0;i<8;){
 			boardState[i][0] = new Rook(color);
+			location.put(boardState[i][0], new int[]{i,0});
 			boardState[i][1] = new Knight(color);
+			location.put(boardState[i][1], new int[]{i,1});
 			boardState[i][2] = new Bishop(color);
+			location.put(boardState[i][2], new int[]{i,2});
 			boardState[i][3] = new King(color);
+			location.put(boardState[i][3], new int[]{i,3});
 			boardState[i][4] = new Queen(color);
+			location.put(boardState[i][4], new int[]{i,4});
 			boardState[i][5] = new Bishop(color);
+			location.put(boardState[i][5], new int[]{i,5});
 			boardState[i][6] = new Knight(color);
+			location.put(boardState[i][6], new int[]{i,6});
 			boardState[i][7] = new Rook(color);
+			location.put(boardState[i][7], new int[]{i,7});
 			i+=1;
 			if(i == 8){
 				i = 6;
 			}
 			for(int j = 0; j<8;j++){
 				boardState[i][j] = new Pawn(color);
+				location.put(boardState[i][j], new int[]{i,j});
 			}
 			i+=6;
 			color ="White";
