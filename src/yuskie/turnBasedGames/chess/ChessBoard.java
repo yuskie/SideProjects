@@ -4,76 +4,113 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChessBoard {
-	private ChessPieces[][] boardState;
+	private Map<String,ChessPiece> boardState;
+	private Map<ChessPiece, String> pieceLocation;
+	public static final String[] XVALUES = new String[]{"a","b","c","d","e","f","g","h"};
 	
 	public ChessBoard(){
-		boardState = new ChessPieces[8][8];
+		boardState = new HashMap<String, ChessPiece>();
+		pieceLocation = new HashMap<ChessPiece, String>();
 		resetBoard();
 	}
 	
-	public ChessPieces getPiece(int x, int y){
-		return boardState[x][y];
+	private void resetBoard(){
+		String color = "White";
+		for(int j =0; j<8; j++){
+			ChessPiece[] allBackrowPieces = new ChessPiece[]{new Rook(color), new Knight(color), new Bishop(color), 
+					new Queen(color), new King(color), new Bishop(color), new Knight(color), new Rook(color)};
+			for(int i=0; i<XVALUES.length;i++){
+				String xLetterValue = XVALUES[i];
+				if(j==6){
+					color ="Black";
+				}
+				if(j==0 || j==7){
+					if(color.equals("Black")&&xLetterValue.equals("d")){
+						boardState.put(xLetterValue+":"+Integer.toString(j+1), allBackrowPieces[i+1]);
+						pieceLocation.put(allBackrowPieces[i+1], xLetterValue+":"+Integer.toString(j+1));
+					}else if(color.equals("Black")&&xLetterValue.equals("e")){
+						boardState.put(xLetterValue+":"+Integer.toString(j+1), allBackrowPieces[i-1]);
+						pieceLocation.put(allBackrowPieces[i-1],xLetterValue+":"+Integer.toString(j+1));
+					}else{
+						boardState.put(xLetterValue+":"+Integer.toString(j+1), allBackrowPieces[i]);
+						pieceLocation.put(allBackrowPieces[i],xLetterValue+":"+Integer.toString(j+1));
+					}
+				}else if(j==1 || j==6){
+					Pawn newPawn = new Pawn(color);
+					boardState.put(xLetterValue+":"+Integer.toString(j+1), newPawn);
+					pieceLocation.put(newPawn, xLetterValue+":"+Integer.toString(j+1));
+				}else{
+					boardState.put(xLetterValue+":"+Integer.toString(j+1), null);
+				}
+			}
+		}
 	}
 	
-	private void resetBoard(){
-		String color = "Black";
-		for(int i = 0;i<8;){
-			boardState[i][0] = new Rook(color);
-			boardState[i][1] = new Knight(color);
-			boardState[i][2] = new Bishop(color);
-			boardState[i][3] = new King(color);
-			boardState[i][4] = new Queen(color);
-			boardState[i][5] = new Bishop(color);
-			boardState[i][6] = new Knight(color);
-			boardState[i][7] = new Rook(color);
-			i+=1;
-			if(i == 8){
-				i = 6;
-			}
-			for(int j = 0; j<8;j++){
-				boardState[i][j] = new Pawn(color);
-			}
-			i+=6;
-			color ="White";
+	public boolean movePiece(String playerColor, String pieceLoc, String moveLoc){
+		ChessPiece pieceToMove = boardState.get(pieceLoc);
+		if(pieceToMove.legalMove(moveLoc, this)){
+			return true;
 		}
+		return false;
 	}
 	
 	public void printBoard(){
+		// Constructs board edges
 		String boardEdge="";
-		for(int i =0; i <41; i++){
+		for(int i=0; i <49; i++){
 			boardEdge= boardEdge.concat("-");
 		}
 		System.out.println(boardEdge);
-		for(int i = 0; i<8;i++){
-			System.out.print("|");
-			for(int j = 0; j<8; j++){
-				if(this.boardState[i][j] == null){
-					System.out.print("    ");
+		for(int i=0; i<8; i++){
+			System.out.printf("|");
+			for(int j=0; j<8; j++){
+				String xLetterValue = XVALUES[j];
+				String boardStateKey = xLetterValue + ":"+ Integer.toString(i+1);
+				ChessPiece piece = boardState.get(boardStateKey);
+				if(piece == null){
+					System.out.printf("%6s", "|");
 				}else{
-					System.out.print(this.boardState[i][j].printPiece());
+					System.out.printf("%-5s",piece.printPiece());
+					System.out.print("|");
 				}
-				System.out.print("|");
 			}
-			System.out.print("  " + i);
 			System.out.println();
 			System.out.println(boardEdge);
 		}
-		for(int i = 0; i<8; i++){
-			System.out.print("  " +i +"  ");
-		}
-		System.out.println();
+		
+		
 	}
 	
+	public ChessPiece isOccupied(String position){
+		return boardState.get(position);
+	}
 	
 //// Test if it prints board correctly
 	public static void main(String[] args){
 		ChessBoard newChessGame = new ChessBoard();
 		newChessGame.printBoard();
-		ChessPieces piece = newChessGame.getPiece(0, 0);
-		int[] location = piece.getXYLocation(newChessGame);
-		for(int i =0 ; i<location.length;i++){
-			System.out.print(location[i]+ " ");
+		for(String i :newChessGame.getBoardState().keySet()){
+			if(newChessGame.getBoardState().get(i) == null){
+				System.out.println(i + " : null");
+			}else{
+				System.out.println(i + " : " + newChessGame.getBoardState().get(i).printPiece());
+			}
 		}
+		for(ChessPiece i :newChessGame.getPieceLocation().keySet()){
+			if(newChessGame.getPieceLocation().get(i) == null){
+				System.out.println(i + " : null");
+			}else{
+				System.out.println(i.printPiece() + " : " + newChessGame.getPieceLocation().get(i));
+			}
+		}
+	}
+
+	public Map<String, ChessPiece> getBoardState() {
+		return boardState;
+	}
+
+	public Map<ChessPiece, String> getPieceLocation() {
+		return pieceLocation;
 	}
 
 }

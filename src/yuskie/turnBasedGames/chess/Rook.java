@@ -1,15 +1,18 @@
 package yuskie.turnBasedGames.chess;
 
-public class Rook implements ChessPieces{
+public class Rook implements ChessPiece{
 
-	String color;
+	private String color;
+	private boolean canCastle;
+	
 	public Rook(String color){
 		this.color = color;
+		canCastle = true;
 	}
 
-	public String[] possibleMovements(ChessBoard currentState) {
+	public boolean legalMove(String moveLoc, ChessBoard chessBoard) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 	
 	public String printPiece() {
@@ -25,18 +28,4 @@ public class Rook implements ChessPieces{
 	public String getColor() {
 		return this.color;
 	}
-
-	public int[] getXYLocation(ChessBoard currentState) {
-		int[] pieceLocation = new int[2];
-		for(int i = 0; i<8; i++){
-			for(int j = 0; j<8; j++){
-				if(this == currentState.getPiece(i,j)){
-					pieceLocation[0]=i;
-					pieceLocation[1]=j;
-				}
-			}
-		}
-		return pieceLocation;
-	}
-
 }
