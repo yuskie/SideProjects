@@ -31,32 +31,90 @@ public class Utility {
 		return true;
 	}
 	
-	public boolean diagonalMovement(String startLoc, String endLoc){
+	public static boolean diagonalMovement(String startLoc, String endLoc, int distance){
 		int getXStartLoc = getXValue(startLoc);
 		int getYStartLoc = getYValue(startLoc);
 		
 		int getXEndLoc = getXValue(endLoc);
 		int getYEndLoc = getYValue(endLoc);
 		
+		if(getXStartLoc == -1 || getYStartLoc == -1 || getXEndLoc == -1 || getYEndLoc == -1){
+			return false;
+		}
+		
 		if(getXStartLoc == getXEndLoc || getYStartLoc == getYEndLoc){
 			return false;
+		}
+		if(Math.abs(getXStartLoc-getXEndLoc)>distance || Math.abs(getYStartLoc-getYEndLoc)>distance){
+			return false;
+		}
+		if(Math.abs(getXStartLoc-getXEndLoc) == Math.abs(getYStartLoc-getYEndLoc)){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean lMovement(String startLoc, String endLoc){
+		int getXStartLoc = getXValue(startLoc);
+		int getYStartLoc = getYValue(startLoc);
+		
+		int getXEndLoc = getXValue(endLoc);
+		int getYEndLoc = getYValue(endLoc);
+		
+		if(getXStartLoc == -1 || getYStartLoc == -1 || getXEndLoc == -1 || getYEndLoc == -1){
+			return false;
+		}
+		
+		if(getXStartLoc == getXEndLoc || getYStartLoc == getYEndLoc){
+			return false;
+		}
+		
+		if((Math.abs(getXStartLoc - getXEndLoc) == 2 && Math.abs(getYStartLoc-getYEndLoc) ==1) ||
+				(Math.abs(getXStartLoc - getXEndLoc) == 1 && Math.abs(getYStartLoc-getYEndLoc) ==2)){
+			return true;
 		}
 		
 		return false;
 	}
 	
-	public boolean lMovement(String startLoc, String endLoc){
+	public static String getNextLoc(String startLoc, String endLoc){
 		int getXStartLoc = getXValue(startLoc);
 		int getYStartLoc = getYValue(startLoc);
 		
 		int getXEndLoc = getXValue(endLoc);
 		int getYEndLoc = getYValue(endLoc);
 		
-		if(getXStartLoc == getXEndLoc || getYStartLoc == getYEndLoc){
-			return false;
+		// Knight movement
+		if((Math.abs(getXStartLoc - getXEndLoc) == 2 && Math.abs(getYStartLoc-getYEndLoc) ==1) ||
+				(Math.abs(getXStartLoc - getXEndLoc) == 1 && Math.abs(getYStartLoc-getYEndLoc) ==2)){
+			return endLoc;
 		}
-		
-		return false;
+		//Diagonal movement
+		if(Math.abs(getXStartLoc-getXEndLoc) == Math.abs(getYStartLoc-getYEndLoc)){
+			if(getXStartLoc-getXEndLoc<0){
+				getXStartLoc--;
+			}else{
+				getXStartLoc++;
+			}
+			if(getYStartLoc-getYEndLoc<0){
+				getYStartLoc--;
+			}else{
+				getYStartLoc++;
+			}
+			return convertIntToString(getXStartLoc, getYStartLoc);
+		}
+		//Default movement (Straight movement)
+		if(getXStartLoc-getXEndLoc<0){
+			getXStartLoc--;
+		}else if(getXStartLoc-getXEndLoc>0){
+			getXStartLoc++;
+		}
+		if(getYStartLoc-getYEndLoc<0){
+			getYStartLoc--;
+		}else if(getYStartLoc-getYEndLoc>0){
+			getYStartLoc++;
+		}
+		return convertIntToString(getXStartLoc, getYStartLoc);
 	}
 	
 	// Remember to handle index out of bound when called
@@ -82,5 +140,9 @@ public class Utility {
 		} catch (Exception e) {
 			return -1;
 		}
+	}
+	
+	private static String convertIntToString(int x, int y){
+		return XVALUES[x] + y;
 	}
 }

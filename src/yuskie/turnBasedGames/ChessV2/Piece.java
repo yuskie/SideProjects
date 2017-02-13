@@ -6,5 +6,7 @@ public interface Piece {
 
 	public String print();
 
-	public Color getColor();
+	public Color getColor(); 
+	
+	public boolean validMove(String startLocation, String endLocation);
 }

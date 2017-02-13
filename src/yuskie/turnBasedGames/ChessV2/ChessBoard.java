@@ -1,6 +1,5 @@
 package yuskie.turnBasedGames.ChessV2;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import yuskie.turnBasedGames.ChessV2.Utility.Color;
 
 public class ChessBoard {
 	private Map<String, Piece> boardState;
-	private Map<Piece, String> pieceLocation;
 
 	private static final int X_BLACK_PAWN_START_LOC = 0;
 	private static final int Y_BLACK_PAWN_START_LOC = 7;
@@ -26,7 +24,6 @@ public class ChessBoard {
 
 	public ChessBoard() {
 		boardState = new HashMap<String, Piece>();
-		pieceLocation = new HashMap<Piece, String>();
 		initializeBoardState();
 		setupPawn(Utility.Color.BLACK, X_BLACK_PAWN_START_LOC, Y_BLACK_PAWN_START_LOC);
 		setupPawn(Utility.Color.WHITE, X_WHITE_PAWN_START_LOC, Y_WHITE_PAWN_START_LOC);
@@ -65,12 +62,27 @@ public class ChessBoard {
 		if (movingPiece == null || movingPiece.getColor() != color) {
 			return false;
 		}
-		if(movingPiece.validMove(startLocation, endLocation)){
-			if(blockingPath(startLocation, endLocation)){
-				
-			}
+		if(movingPiece.validMove(startLocation, endLocation) && blockingPath(startLocation, endLocation)){
+			
+			return true;
 		}
 		return false;
+	}
+	
+	public boolean blockingPath(String startLocation,String endLocation){
+		Piece endLocPiece = boardState.get(endLocation);
+		Piece startPiece = boardState.get(startLocation);
+		if(endLocPiece != null && endLocPiece.getColor() == startPiece.getColor()){
+			return false;
+		}
+		String nextString = startLocation;
+		while(!Utility.getNextLoc(nextString, endLocation).equals(endLocation)){
+			nextString = Utility.getNextLoc(nextString, endLocation);
+			if(boardState.get(nextString)!=null){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public boolean isCheckMate(Color color) {
@@ -105,10 +117,6 @@ public class ChessBoard {
 
 	public Map<String, Piece> getBoardState() {
 		return boardState;
-	}
-
-	public Map<Piece, String> getPieceLocation() {
-		return pieceLocation;
 	}
 
 }
