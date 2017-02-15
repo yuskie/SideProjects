@@ -1,27 +1,40 @@
 package yuskie.turnBasedGames.ChessV2;
 import static org.junit.Assert.*;
+import static yuskie.turnBasedGames.ChessV2.Utility.Color.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import yuskie.turnBasedGames.ChessV2.ChessBoard;
 
 public class ChessBoardTest {
 
+	private ChessBoard newBoard;
+	
+	@Before
+	public void setup(){
+		newBoard = new ChessBoard();
+	}
+	
 	@Test
 	public void constructor_test() {
-		ChessBoard newBoard = new ChessBoard();
 		assertEquals(64, newBoard.getBoardState().size());
 	}
-
+	
+	@Test
+	public void setup_board_test(){
+		newBoard.setupNewGame();
+		assertEquals(64, newBoard.getBoardState().size());
+	}
 	@Test
 	public void constructor_test_checking_piece_loc_visual_test() {
-		ChessBoard newBoard = new ChessBoard();
+		newBoard.setupNewGame();
 		newBoard.print();
 	}
 
 	@Test
 	public void constructor_test_unique_pieces_address_checking() {
-		ChessBoard newBoard = new ChessBoard();
+		newBoard.setupNewGame();
 		Object[] pieceArray = newBoard.getBoardState().values().toArray();
 		boolean duplicates = false;
 		for (int i = 0; i < pieceArray.length; i++) {
@@ -34,22 +47,29 @@ public class ChessBoardTest {
 		assertFalse(duplicates);
 	}
 
-//	// Tests wrote to test private methods.
-//	@Test
-//	public void getXValue_test() {
-//		ChessBoard newBoard = new ChessBoard();
-//		int xLoc = newBoard.getXValue("a1");
-//		String xValue = Utility.XVALUES[xLoc];
-//		assertEquals(0, xLoc);
-//		assertEquals("a", xValue);
-//	}
-//
-//	@Test
-//	public void getYValue_test() {
-//		ChessBoard newBoard = new ChessBoard();
-//		int yLoc = newBoard.getYValue("a1");
-//		assertEquals(1, yLoc);
-//		assertEquals(-1, newBoard.getYValue("aa"));
-//		assertEquals(-1, newBoard.getYValue("a9"));
-//	}
+	@Test
+	public void move_piece_with_no_block(){
+		newBoard.setupNewGame();
+		assertTrue(newBoard.movePiece(WHITE, "a2", "a3"));
+		assertNotNull(newBoard.getBoardState().get("a3"));
+		assertNull(newBoard.getBoardState().get("a2"));
+	}
+	
+	public void move_piece_with_same_color_block(){
+		newBoard.setupNewGame();
+		Piece before_movement = newBoard.getBoardState().get("a1");
+		assertFalse(newBoard.movePiece(WHITE, "a1", "a3"));
+		assertNotNull(newBoard.getBoardState().get("a1"));
+		assertNull(newBoard.getBoardState().get("a3"));
+		assertEquals(before_movement, newBoard.getBoardState().get("a1"));
+	}
+	
+	public void destroy_enemy_piece(){
+		Queen whiteQueen = new Queen(WHITE);
+		newBoard.getBoardState().put("d4", whiteQueen);
+		newBoard.getBoardState().put("d5", new Pawn(BLACK));
+		newBoard.movePiece(WHITE, "d4", "d5");
+		assertNull(newBoard.getBoardState().get("d4"));
+		assertEquals(whiteQueen, newBoard.getBoardState().get("d5"));
+	}
 }

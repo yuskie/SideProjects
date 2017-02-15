@@ -5,6 +5,8 @@ import java.util.Arrays;
 public class Utility {
 
 	public static final String[] XVALUES = new String[] { "a", "b", "c", "d", "e", "f", "g", "h" };
+	
+	public static final int BOARD_SIZE = 8;
 
 	public static enum Color {
 		BLACK, WHITE
@@ -91,12 +93,12 @@ public class Utility {
 		}
 		//Diagonal movement
 		if(Math.abs(getXStartLoc-getXEndLoc) == Math.abs(getYStartLoc-getYEndLoc)){
-			if(getXStartLoc-getXEndLoc<0){
+			if(getXEndLoc-getXStartLoc<0){
 				getXStartLoc--;
 			}else{
 				getXStartLoc++;
 			}
-			if(getYStartLoc-getYEndLoc<0){
+			if(getYEndLoc-getYStartLoc<0){
 				getYStartLoc--;
 			}else{
 				getYStartLoc++;
@@ -104,14 +106,14 @@ public class Utility {
 			return convertIntToString(getXStartLoc, getYStartLoc);
 		}
 		//Default movement (Straight movement)
-		if(getXStartLoc-getXEndLoc<0){
+		if(getXEndLoc-getXStartLoc<0){
 			getXStartLoc--;
-		}else if(getXStartLoc-getXEndLoc>0){
+		}else if(getXEndLoc-getXStartLoc>0){
 			getXStartLoc++;
 		}
-		if(getYStartLoc-getYEndLoc<0){
+		if(getYEndLoc-getYStartLoc<0){
 			getYStartLoc--;
-		}else if(getYStartLoc-getYEndLoc>0){
+		}else if(getYEndLoc-getYStartLoc>0){
 			getYStartLoc++;
 		}
 		return convertIntToString(getXStartLoc, getYStartLoc);

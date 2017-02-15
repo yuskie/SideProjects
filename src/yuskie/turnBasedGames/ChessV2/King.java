@@ -1,12 +1,18 @@
 package yuskie.turnBasedGames.ChessV2;
 
 import yuskie.turnBasedGames.ChessV2.Utility.Color;
+import static yuskie.turnBasedGames.ChessV2.Utility.*;
 
 public class King implements Piece {
 	Color color;
-
+	private static final int MAX_NORMAL_MOVEMENT = 1;
+	
 	public King(Color color) {
 		this.color = color;
+	}
+	
+	public boolean validMove(String startLocation, String endLocation) {
+		return diagonalMovement(startLocation, endLocation, MAX_NORMAL_MOVEMENT) || straightMovement(startLocation, endLocation, MAX_NORMAL_MOVEMENT);
 	}
 
 	public String print() {

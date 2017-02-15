@@ -25,64 +25,25 @@ public class ChessBoard {
 	public ChessBoard() {
 		boardState = new HashMap<String, Piece>();
 		initializeBoardState();
+	}
+	
+	public void setupNewGame(){
 		setupPawn(Utility.Color.BLACK, X_BLACK_PAWN_START_LOC, Y_BLACK_PAWN_START_LOC);
 		setupPawn(Utility.Color.WHITE, X_WHITE_PAWN_START_LOC, Y_WHITE_PAWN_START_LOC);
 		setupBackRow(Utility.Color.BLACK, X_BLACK_BACK_START_LOC, Y_BLACK_BACK_START_LOC);
 		setupBackRow(Utility.Color.WHITE, X_WHITE_BACK_START_LOC, Y_WHITE_BACK_START_LOC);
 	}
-
-	private void initializeBoardState() {
-		for (int i = 0; i < Utility.XVALUES.length; i++) {
-			for (int j = 1; j <= BOARD_SIZE; j++) {
-				boardState.put(Utility.XVALUES[i] + j, null);
-			}
-		}
-	}
-
-	private void setupPawn(Color color, int xValueLoc, int yLocation) {
-		for (int i = 0; i < Utility.XVALUES.length; i++) {
-			Pawn temp = new Pawn(color);
-			boardState.put(Utility.XVALUES[xValueLoc] + yLocation, temp);
-			xValueLoc++;
-		}
-	}
-
-	private void setupBackRow(Color color, int xValueLoc, int yLocation) {
-		Piece[] backRow = { new Rook(color), new Knight(color), new Bishop(color), new Queen(color), new King(color),
-				new Bishop(color), new Knight(color), new Rook(color) };
-		for (int i = 0; i < Utility.XVALUES.length; i++) {
-			boardState.put(Utility.XVALUES[xValueLoc] + yLocation, backRow[i]);
-			xValueLoc++;
-		}
-	}
-
 	public boolean movePiece(Color color, String startLocation, String endLocation) {
-		// TODO Auto-generated method stub
 		Piece movingPiece = boardState.get(startLocation);
 		if (movingPiece == null || movingPiece.getColor() != color) {
 			return false;
 		}
-		if(movingPiece.validMove(startLocation, endLocation) && blockingPath(startLocation, endLocation)){
-			
+		if (movingPiece.validMove(startLocation, endLocation) && blockingPath(startLocation, endLocation)) {
+			boardState.put(endLocation, boardState.get(startLocation));
+			boardState.put(startLocation, null);
 			return true;
 		}
 		return false;
-	}
-	
-	public boolean blockingPath(String startLocation,String endLocation){
-		Piece endLocPiece = boardState.get(endLocation);
-		Piece startPiece = boardState.get(startLocation);
-		if(endLocPiece != null && endLocPiece.getColor() == startPiece.getColor()){
-			return false;
-		}
-		String nextString = startLocation;
-		while(!Utility.getNextLoc(nextString, endLocation).equals(endLocation)){
-			nextString = Utility.getNextLoc(nextString, endLocation);
-			if(boardState.get(nextString)!=null){
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public boolean isCheckMate(Color color) {
@@ -92,7 +53,7 @@ public class ChessBoard {
 	public void print() {
 		String border = createBorder();
 		System.out.println(border);
-		for (int i = 1; i <= BOARD_SIZE; i++) {
+		for (int i = BOARD_SIZE; i > 0; i--) {
 			for (int j = 0; j < Utility.XVALUES.length; j++) {
 				System.out.print("|");
 				if (boardState.get(Utility.XVALUES[j] + i) == null) {
@@ -106,6 +67,10 @@ public class ChessBoard {
 			System.out.println(border);
 		}
 	}
+	
+	public Map<String, Piece> getBoardState() {
+		return boardState;
+	}
 
 	private String createBorder() {
 		String result = "";
@@ -115,8 +80,44 @@ public class ChessBoard {
 		return result;
 	}
 
-	public Map<String, Piece> getBoardState() {
-		return boardState;
+	private boolean blockingPath(String startLocation, String endLocation) {
+		Piece endLocPiece = boardState.get(endLocation);
+		Piece startPiece = boardState.get(startLocation);
+		if (endLocPiece != null && endLocPiece.getColor() == startPiece.getColor()) {
+			return false;
+		}
+		String nextString = startLocation;
+		while (!Utility.getNextLoc(nextString, endLocation).equals(endLocation)) {
+			nextString = Utility.getNextLoc(nextString, endLocation);
+			if (boardState.get(nextString) != null) {
+				return false;
+			}
+		}
+		return true;
 	}
-
+	
+	private void initializeBoardState() {
+		for (int i = 0; i < Utility.XVALUES.length; i++) {
+			for (int j = 1; j <= BOARD_SIZE; j++) {
+				boardState.put(Utility.XVALUES[i] + j, null);
+			}
+		}
+	}
+	
+	private void setupPawn(Color color, int xValueLoc, int yLocation) {
+		for (int i = 0; i < Utility.XVALUES.length; i++) {
+			Pawn temp = new Pawn(color);
+			boardState.put(Utility.XVALUES[xValueLoc] + yLocation, temp);
+			xValueLoc++;
+		}
+	}
+	
+	private void setupBackRow(Color color, int xValueLoc, int yLocation) {
+		Piece[] backRow = { new Rook(color), new Knight(color), new Bishop(color), new Queen(color), new King(color),
+				new Bishop(color), new Knight(color), new Rook(color) };
+		for (int i = 0; i < Utility.XVALUES.length; i++) {
+			boardState.put(Utility.XVALUES[xValueLoc] + yLocation, backRow[i]);
+			xValueLoc++;
+		}
+	}
 }

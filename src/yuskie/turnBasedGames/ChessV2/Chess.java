@@ -14,6 +14,7 @@ public class Chess extends GameBase {
 	public Chess() {
 		super(2);
 		newChessBoard = new ChessBoard();
+		newChessBoard.setupNewGame();
 		players = new ArrayList<Player>();
 	}
 

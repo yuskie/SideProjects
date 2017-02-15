@@ -1,12 +1,18 @@
 package yuskie.turnBasedGames.ChessV2;
 
 import yuskie.turnBasedGames.ChessV2.Utility.Color;
+import static yuskie.turnBasedGames.ChessV2.Utility.*;
+
 
 public class Knight implements Piece {
 	Color color;
 
 	public Knight(Color color) {
 		this.color = color;
+	}
+	
+	public boolean validMove(String startLocation, String endLocation) {
+		return lMovement(startLocation, endLocation);
 	}
 
 	public String print() {
