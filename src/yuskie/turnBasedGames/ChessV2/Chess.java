@@ -10,6 +10,7 @@ import yuskie.turnBasedGames.ChessV2.Utility.Color;
 public class Chess extends GameBase {
 	private List<Player> players;
 	private ChessBoard newChessBoard;
+	private Scanner scanner;
 
 	public Chess() {
 		super(2);
@@ -22,26 +23,26 @@ public class Chess extends GameBase {
 	protected void setup(int numberOfPlayers) {
 		players.add(new Player(Color.WHITE));
 		players.add(new Player(Color.BLACK));
+		scanner = new Scanner(System.in);
 	}
 
 	@Override
 	protected void takeTurn(int player) {
-		Scanner scanner = new Scanner(System.in);
+		newChessBoard.print();
 		Player currentPlayer = players.get(player - 1);
-		if (newChessBoard.isCheckMate(currentPlayer.getColor())) {
-			boolean moved = true;
+		if (!newChessBoard.isCheckMate(currentPlayer.getColor())) {
+			boolean moved = false;
 			while (!moved) {
 				System.out.print("What piece would you like to move? ");
 				String pieceMoving = scanner.nextLine().toLowerCase();
-				System.out.println("Where would you like to move it? ");
+				System.out.print("Where would you like to move it? ");
 				String location = scanner.nextLine().toLowerCase();
 				moved = newChessBoard.movePiece(currentPlayer.getColor(), pieceMoving, location);
-				if (moved) {
+				if (!moved) {
 					System.out.println("Invalid move");
 				}
 			}
 		}
-		scanner.close();
 	}
 
 	@Override
@@ -51,6 +52,7 @@ public class Chess extends GameBase {
 
 	@Override
 	protected void finishGame() {
+		scanner.close();
 		Player winner = getActivePlayers().get(0);
 		System.out.println("Congratz! Player " + winner.getColor() + " is the winner!!!");
 	}
