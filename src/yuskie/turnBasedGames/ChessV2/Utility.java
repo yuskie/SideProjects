@@ -12,6 +12,16 @@ public class Utility {
 		BLACK, WHITE
 	}
 	
+	public static boolean castlingMovement(String startLoc, String endLoc, boolean kingMoved){
+		int getXStartLoc = getXValue(startLoc);
+		int getXEndLoc = getXValue(endLoc);
+
+		if(Math.abs(getXEndLoc-getXStartLoc) == 2 && !kingMoved){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean straightMovement(String startLoc, String endLoc, int distance){
 		int getXStartLoc = getXValue(startLoc);
 		int getYStartLoc = getYValue(startLoc);

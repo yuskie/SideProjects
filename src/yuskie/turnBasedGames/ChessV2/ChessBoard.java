@@ -41,13 +41,35 @@ public class ChessBoard {
 		if (movingPiece.validMove(startLocation, endLocation) && blockingPath(startLocation, endLocation)) {
 			boardState.put(endLocation, boardState.get(startLocation));
 			boardState.put(startLocation, null);
+			movingPiece.moved();
 			return true;
+		}
+		if(movingPiece.getClass() == King.class){
+			King kingPiece = (King) movingPiece;
+			if(Utility.castlingMovement(startLocation, endLocation, kingPiece.isMoved()) && blockingPath(startLocation, endLocation));{
+				String closestRookLoc = getCastlingRookLoc(endLocation);
+				Piece castleRook = boardState.get(closestRookLoc);
+				if(castleRook != null && castleRook.getClass() == Rook.class && !castleRook.isMoved()){
+					
+				}
+			}
 		}
 		return false;
 	}
 
 	public boolean isCheckMate(Color color) {
 		return false;
+	}
+	
+	private String getCastlingRookLoc(String endLocation){
+		String rookLoc = endLocation.substring(1);
+		String result;
+		if(endLocation.substring(0,1) != null && endLocation.substring(0,1).equals("g")){
+			result = "h".concat(rookLoc);
+		}else{
+			result = "a".concat(rookLoc);
+		}
+		return result;
 	}
 
 	public void print() {

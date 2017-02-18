@@ -6,9 +6,11 @@ import static yuskie.turnBasedGames.ChessV2.Utility.*;
 public class King implements Piece {
 	Color color;
 	private static final int MAX_NORMAL_MOVEMENT = 1;
+	boolean moved;
 	
 	public King(Color color) {
 		this.color = color;
+		moved = false;
 	}
 	
 	public boolean validMove(String startLocation, String endLocation) {
@@ -27,5 +29,13 @@ public class King implements Piece {
 
 	public Color getColor() {
 		return this.color;
+	}
+
+	public boolean isMoved() {
+		return moved;
+	}
+
+	public void moved() {
+		this.moved = true;
 	}
 }

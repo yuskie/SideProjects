@@ -5,10 +5,12 @@ import static yuskie.turnBasedGames.ChessV2.Utility.*;
 
 
 public class Knight implements Piece {
-	Color color;
-
+	private Color color;
+	private boolean moved;
+	
 	public Knight(Color color) {
 		this.color = color;
+		this.moved = false;
 	}
 	
 	public boolean validMove(String startLocation, String endLocation) {
@@ -27,5 +29,13 @@ public class Knight implements Piece {
 
 	public Color getColor() {
 		return this.color;
+	}
+
+	public void moved() {
+		this.moved = true;
+	}
+	
+	public boolean isMoved(){
+		return this.moved;
 	}
 }

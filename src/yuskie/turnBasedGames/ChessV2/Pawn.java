@@ -4,18 +4,18 @@ import yuskie.turnBasedGames.ChessV2.Utility.Color;
 import static yuskie.turnBasedGames.ChessV2.Utility.*;
 
 public class Pawn implements Piece {
-	Color color;
-	boolean haveMoved;
+	private Color color;
+	private boolean moved;
 	private static final int MAX_DISTANCE = 2;
 	private static final int NORMAL_DISTANCE = 1;
 
 	public Pawn(Color color) {
 		this.color = color;
-		haveMoved = false;
+		moved = false;
 	}
 	
 	public boolean validMove(String startLocation, String endLocation) {
-		if(!haveMoved){
+		if(!moved){
 			return straightMovement(startLocation, endLocation, MAX_DISTANCE);
 		}
 		return straightMovement(startLocation, endLocation, NORMAL_DISTANCE);
@@ -33,5 +33,13 @@ public class Pawn implements Piece {
 
 	public Color getColor() {
 		return this.color;
+	}
+
+	public void moved() {
+		this.moved = true;
+	}
+
+	public boolean isMoved() {
+		return this.moved;
 	}
 }

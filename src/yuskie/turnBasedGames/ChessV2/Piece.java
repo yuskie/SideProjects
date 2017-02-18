@@ -9,4 +9,8 @@ public interface Piece {
 	public Color getColor(); 
 	
 	public boolean validMove(String startLocation, String endLocation);
+
+	public void moved();
+	
+	public boolean isMoved();
 }

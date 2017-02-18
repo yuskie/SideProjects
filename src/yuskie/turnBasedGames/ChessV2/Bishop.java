@@ -4,10 +4,12 @@ import yuskie.turnBasedGames.ChessV2.Utility.Color;
 import static yuskie.turnBasedGames.ChessV2.Utility.*;
 
 public class Bishop implements Piece {
-	Color color;
+	private Color color;
+	private boolean moved;
 
 	public Bishop(Color color) {
 		this.color = color;
+		this.moved = false;
 	}
 	
 	public boolean validMove(String startLocation, String endLocation) {
@@ -26,5 +28,13 @@ public class Bishop implements Piece {
 
 	public Color getColor() {
 		return this.color;
+	}
+
+	public void moved() {
+		this.moved = true;
+	}
+	
+	public boolean isMoved(){
+		return this.moved;
 	}
 }
