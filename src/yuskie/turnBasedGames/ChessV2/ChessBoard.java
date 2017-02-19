@@ -50,7 +50,17 @@ public class ChessBoard {
 				String closestRookLoc = getCastlingRookLoc(endLocation);
 				Piece castleRook = boardState.get(closestRookLoc);
 				if(castleRook != null && castleRook.getClass() == Rook.class && !castleRook.isMoved()){
-					
+					String rookEndLoc = "";
+					if(closestRookLoc.substring(0,1).equals(Utility.XVALUES[0])){
+						rookEndLoc = Utility.XVALUES[2].concat(closestRookLoc.substring(1));
+					}else{
+						rookEndLoc = Utility.XVALUES[5].concat(closestRookLoc.substring(1));
+					}
+					boardState.put(endLocation, kingPiece);
+					boardState.put(rookEndLoc, castleRook);
+					boardState.put(startLocation, null);
+					boardState.put(closestRookLoc, null);
+					return true;
 				}
 			}
 		}
@@ -65,9 +75,11 @@ public class ChessBoard {
 		String rookLoc = endLocation.substring(1);
 		String result;
 		if(endLocation.substring(0,1) != null && endLocation.substring(0,1).equals("g")){
-			result = "h".concat(rookLoc);
+			int hLocation = 7;
+			result = Utility.XVALUES[hLocation].concat(rookLoc);
 		}else{
-			result = "a".concat(rookLoc);
+			int aLocation = 0;
+			result = Utility.XVALUES[aLocation].concat(rookLoc);
 		}
 		return result;
 	}

@@ -43,6 +43,12 @@ public class Utility {
 		return true;
 	}
 	
+	public static boolean onlyYMovement(String startLoc, String endLoc){
+		int getXStartLoc = getXValue(startLoc);
+		int getXEndLoc = getXValue(endLoc);
+		return getXStartLoc == getXEndLoc;
+	}
+	
 	public static boolean diagonalMovement(String startLoc, String endLoc, int distance){
 		int getXStartLoc = getXValue(startLoc);
 		int getYStartLoc = getYValue(startLoc);

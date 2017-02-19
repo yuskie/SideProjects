@@ -16,7 +16,7 @@ public class Pawn implements Piece {
 	
 	public boolean validMove(String startLocation, String endLocation) {
 		if(!moved){
-			return straightMovement(startLocation, endLocation, MAX_DISTANCE);
+			return onlyYMovement(startLocation, endLocation) && straightMovement(startLocation, endLocation, MAX_DISTANCE);
 		}
 		return straightMovement(startLocation, endLocation, NORMAL_DISTANCE);
 	}
