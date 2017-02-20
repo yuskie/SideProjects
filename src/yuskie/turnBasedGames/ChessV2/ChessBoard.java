@@ -2,6 +2,7 @@ package yuskie.turnBasedGames.ChessV2;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import yuskie.turnBasedGames.ChessV2.Utility.Color;
 
@@ -21,6 +22,8 @@ public class ChessBoard {
 	private static final int Y_WHITE_BACK_START_LOC = 1;
 
 	private static final int BOARD_SIZE = 8;
+	
+	private boolean pawnMoved = false;
 
 	public ChessBoard() {
 		boardState = new HashMap<String, Piece>();
@@ -37,34 +40,87 @@ public class ChessBoard {
 		Piece movingPiece = boardState.get(startLocation);
 		if (movingPiece == null || movingPiece.getColor() != color) {
 			return false;
-		}
-		if (movingPiece.validMove(startLocation, endLocation) && blockingPath(startLocation, endLocation)) {
-			boardState.put(endLocation, boardState.get(startLocation));
-			boardState.put(startLocation, null);
-			movingPiece.moved();
+		}else if (checkValidMove(startLocation, endLocation, movingPiece)) {
+			movePieces(startLocation, endLocation, movingPiece);
+			pawnPromotion(endLocation, movingPiece);
 			return true;
-		}
-		if(movingPiece.getClass() == King.class){
+		}else if(movingPiece.getClass() == King.class){
 			King kingPiece = (King) movingPiece;
-			if(Utility.castlingMovement(startLocation, endLocation, kingPiece.isMoved()) && blockingPath(startLocation, endLocation));{
+			if(canCastle(startLocation, endLocation, kingPiece));{
 				String closestRookLoc = getCastlingRookLoc(endLocation);
 				Piece castleRook = boardState.get(closestRookLoc);
 				if(castleRook != null && castleRook.getClass() == Rook.class && !castleRook.isMoved()){
-					String rookEndLoc = "";
-					if(closestRookLoc.substring(0,1).equals(Utility.XVALUES[0])){
-						rookEndLoc = Utility.XVALUES[2].concat(closestRookLoc.substring(1));
-					}else{
-						rookEndLoc = Utility.XVALUES[5].concat(closestRookLoc.substring(1));
-					}
-					boardState.put(endLocation, kingPiece);
-					boardState.put(rookEndLoc, castleRook);
-					boardState.put(startLocation, null);
-					boardState.put(closestRookLoc, null);
+					castling(startLocation, endLocation, kingPiece, closestRookLoc, castleRook);
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	private void pawnPromotion(String endLocation, Piece movingPiece) {
+		if(movingPiece.getClass()==Pawn.class && (Integer.parseInt(endLocation.substring(1))==1 || Integer.parseInt(endLocation.substring(1))==8)){
+			if(movingPiece.getColor().equals(Utility.Color.BLACK) && Integer.parseInt(endLocation.substring(1))==1){
+				promotePawn(endLocation, movingPiece.getColor());
+			}else if(movingPiece.getColor().equals(Utility.Color.WHITE) && Integer.parseInt(endLocation.substring(1))==8){
+				promotePawn(endLocation, movingPiece.getColor());
+			}
+		}
+	}
+
+	private void promotePawn(String pawnLocation, Color color){
+		Scanner temp = new Scanner(System.in);
+		boolean undecided = true;
+		while(undecided){
+			System.out.print("What would you like to promote to? (KN, B, Q, R)");
+			undecided = false;
+			String pieceType = temp.nextLine().toLowerCase();
+			if(pieceType.equals("kn")){
+				boardState.put(pawnLocation, new Knight(color));
+			}else if(pieceType.equals("b")){
+				boardState.put(pawnLocation, new Bishop(color));
+			}else if(pieceType.equals("q")){
+				boardState.put(pawnLocation, new Queen(color));
+			}else if(pieceType.equals("r")){
+				boardState.put(pawnLocation, new Rook(color));
+			}else{
+				System.out.println("Input invalid. Try again");
+				undecided = true;
+			}
+		}
+	}
+	
+	private boolean canCastle(String startLocation, String endLocation, King kingPiece) {
+		return Utility.castlingMovement(startLocation, endLocation, kingPiece.isMoved()) && blockingPath(startLocation, endLocation);
+	}
+
+	private boolean checkValidMove(String startLocation, String endLocation, Piece movingPiece) {
+		return movingPiece.validMove(startLocation, endLocation) && blockingPath(startLocation, endLocation);
+	}
+
+	private void movePieces(String startLocation, String endLocation, Piece movingPiece) {
+		boardState.put(endLocation, boardState.get(startLocation));
+		boardState.put(startLocation, null);
+		movingPiece.moved();
+	}
+
+	private void castling(String startLocation, String endLocation, King kingPiece, String closestRookLoc,
+			Piece castleRook) {
+		String rookEndLoc = getRookEndLoc(closestRookLoc);
+		boardState.put(endLocation, kingPiece);
+		boardState.put(rookEndLoc, castleRook);
+		boardState.put(startLocation, null);
+		boardState.put(closestRookLoc, null);
+	}
+
+	private String getRookEndLoc(String closestRookLoc) {
+		String rookEndLoc = "";
+		if(closestRookLoc.substring(0,1).equals(Utility.XVALUES[0])){
+			rookEndLoc = Utility.XVALUES[3].concat(closestRookLoc.substring(1));
+		}else{
+			rookEndLoc = Utility.XVALUES[5].concat(closestRookLoc.substring(1));
+		}
+		return rookEndLoc;
 	}
 
 	public boolean isCheckMate(Color color) {

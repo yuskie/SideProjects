@@ -55,6 +55,7 @@ public class ChessBoardTest {
 		assertNull(newBoard.getBoardState().get("a2"));
 	}
 	
+	@Test
 	public void move_piece_with_same_color_block(){
 		newBoard.setupNewGame();
 		Piece before_movement = newBoard.getBoardState().get("a1");
@@ -62,8 +63,12 @@ public class ChessBoardTest {
 		assertNotNull(newBoard.getBoardState().get("a1"));
 		assertNull(newBoard.getBoardState().get("a3"));
 		assertEquals(before_movement, newBoard.getBoardState().get("a1"));
+		assertTrue(newBoard.movePiece(WHITE, "b1", "c3"));
+		assertNotNull(newBoard.getBoardState().get("c3"));
+		assertNull(newBoard.getBoardState().get("b1"));
 	}
 	
+	@Test
 	public void destroy_enemy_piece(){
 		Queen whiteQueen = new Queen(WHITE);
 		newBoard.getBoardState().put("d4", whiteQueen);
@@ -71,5 +76,69 @@ public class ChessBoardTest {
 		newBoard.movePiece(WHITE, "d4", "d5");
 		assertNull(newBoard.getBoardState().get("d4"));
 		assertEquals(whiteQueen, newBoard.getBoardState().get("d5"));
+	}
+	
+	@Test
+	public void castling_left_rook(){
+		King whiteKing = new King(WHITE);
+		King blackKing = new King(BLACK);
+		Rook whiteRook = new Rook(WHITE);
+		Rook blackRook = new Rook(BLACK);
+		newBoard.getBoardState().put("e1", whiteKing);
+		newBoard.getBoardState().put("e8", blackKing);
+		newBoard.getBoardState().put("a1", whiteRook);
+		newBoard.getBoardState().put("a8", blackRook);
+		assertTrue(newBoard.movePiece(WHITE, "e1", "c1"));
+		assertNull(newBoard.getBoardState().get("e1"));
+		assertNull(newBoard.getBoardState().get("a1"));
+		assertNotNull(newBoard.getBoardState().get("c1"));
+		assertNotNull(newBoard.getBoardState().get("d1"));
+		assertFalse(newBoard.movePiece(WHITE, "c1", "c3"));
+		
+		assertTrue(newBoard.movePiece(BLACK, "e8", "c8"));
+		assertNull(newBoard.getBoardState().get("e8"));
+		assertNull(newBoard.getBoardState().get("a8"));
+		assertNotNull(newBoard.getBoardState().get("c8"));
+		assertNotNull(newBoard.getBoardState().get("d8"));
+		assertFalse(newBoard.movePiece(BLACK, "c8", "e8"));
+
+	}
+	
+	@Test
+	public void castling_right_rook(){
+		King whiteKing = new King(WHITE);
+		King blackKing = new King(BLACK);
+		Rook whiteRook = new Rook(WHITE);
+		Rook blackRook = new Rook(BLACK);
+		newBoard.getBoardState().put("e1", whiteKing);
+		newBoard.getBoardState().put("e8", blackKing);
+		newBoard.getBoardState().put("h1", whiteRook);
+		newBoard.getBoardState().put("h8", blackRook);
+		assertTrue(newBoard.movePiece(WHITE, "e1", "g1"));
+		assertNull(newBoard.getBoardState().get("e1"));
+		assertNull(newBoard.getBoardState().get("h1"));
+		assertNotNull(newBoard.getBoardState().get("g1"));
+		assertNotNull(newBoard.getBoardState().get("f1"));
+		assertFalse(newBoard.movePiece(WHITE, "g1", "e1"));
+		
+		assertTrue(newBoard.movePiece(BLACK, "e8", "g8"));
+		assertNull(newBoard.getBoardState().get("e8"));
+		assertNull(newBoard.getBoardState().get("h8"));
+		assertNotNull(newBoard.getBoardState().get("g8"));
+		assertNotNull(newBoard.getBoardState().get("f8"));
+		assertFalse(newBoard.movePiece(BLACK, "g8", "e8"));
+		
+	}
+	
+	@Test
+	public void pawn_promotion(){
+		Pawn blackPawn = new Pawn(BLACK);
+		Pawn whitePawn = new Pawn(WHITE);
+		newBoard.getBoardState().put("a7", whitePawn);
+		newBoard.getBoardState().put("a2", blackPawn);
+		newBoard.movePiece(WHITE, "a7", "a8");
+		assertNotEquals(newBoard.getBoardState().get("a8").getClass(), Pawn.class);
+		newBoard.movePiece(BLACK, "a2", "a1");
+		assertNotEquals(newBoard.getBoardState().get("a1").getClass(), Pawn.class);
 	}
 }

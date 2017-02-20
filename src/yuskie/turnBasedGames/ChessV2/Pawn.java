@@ -15,10 +15,17 @@ public class Pawn implements Piece {
 	}
 	
 	public boolean validMove(String startLocation, String endLocation) {
+		int yStart = Integer.parseInt(startLocation.substring(1));
+		int yEnd = Integer.parseInt(endLocation.substring(1));
+		if(this.color == Utility.Color.BLACK && yEnd-yStart >0){
+			return false;
+		}else if(this.color == Utility.Color.WHITE && yEnd-yStart <0){
+			return false;
+		}
 		if(!moved){
 			return onlyYMovement(startLocation, endLocation) && straightMovement(startLocation, endLocation, MAX_DISTANCE);
 		}
-		return straightMovement(startLocation, endLocation, NORMAL_DISTANCE);
+		return onlyYMovement(startLocation, endLocation) && straightMovement(startLocation, endLocation, NORMAL_DISTANCE);
 	}
 
 	public String print() {

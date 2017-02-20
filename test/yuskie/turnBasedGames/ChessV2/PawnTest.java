@@ -27,9 +27,25 @@ public class PawnTest {
 	
 	@Test
 	public void movement_check(){
-		assertTrue(newPawn.validMove("a1", "a2"));
+		assertTrue(newPawn.validMove("a3", "a2"));
 		assertFalse(newPawn.validMove("a1", "b1"));
-		assertTrue(newPawn.validMove("a1", "a3"));
+		assertTrue(newPawn.validMove("a3", "a1"));
+		assertTrue(newPawn.validMove("c2", "c1"));
+		Pawn whitePawn = new Pawn(Utility.Color.WHITE);
+		assertFalse(whitePawn.validMove("a3", "a1"));
+		assertFalse(whitePawn.validMove("a3", "a2"));
+		assertFalse(whitePawn.validMove("a1", "b1"));
+		assertFalse(whitePawn.validMove("a3", "a1"));
+		assertFalse(whitePawn.validMove("c2", "c1"));
+		assertTrue(whitePawn.validMove("a1", "a2"));
+		assertTrue(whitePawn.validMove("a1", "a3"));
+		whitePawn.moved();
+		assertFalse(whitePawn.validMove("a1", "a3"));
+		assertTrue(whitePawn.validMove("a1", "a2"));
+		newPawn.moved();
+		assertFalse(newPawn.validMove("c7", "c5"));
+		assertTrue(newPawn.validMove("c7", "c6"));
+
 	}
 
 }
