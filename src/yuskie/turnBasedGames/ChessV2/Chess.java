@@ -42,6 +42,8 @@ public class Chess extends GameBase {
 					System.out.println("Invalid move");
 				}
 			}
+		}else{
+			players.remove(player-1);
 		}
 	}
 
