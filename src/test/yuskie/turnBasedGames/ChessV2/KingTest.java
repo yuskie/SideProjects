@@ -1,9 +1,12 @@
-package yuskie.turnBasedGames.ChessV2;
+package test.yuskie.turnBasedGames.ChessV2;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import yuskie.turnBasedGames.ChessV2.King;
+import yuskie.turnBasedGames.ChessV2.Utility;
 
 public class KingTest {
 	private King newKing;
